@@ -13,3 +13,5 @@ BASE_DIR = os.path.abspath(os.path.dirname(__file__))
 
 # DATABASE URI
 SQLALCHEMY_DATABASE_URI = 'mysql+pymysql://root:cimple1234@localhost/graduation'
+
+UPLOAD_FOLDER = './static/uploads'
