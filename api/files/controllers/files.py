@@ -13,7 +13,11 @@ from config import UPLOAD_FOLDER
 @json
 def files_list():
     if request.method == 'GET':
-        files = db_session.query(File)
+        view_type = request.args.get('type', '')
+        if view_type == "index":
+            files = db_session.query(File).group_by(File.type)
+        else:
+            files = db_session.query(File).filter(File.type == view_type)
 
         data = []
         for item in files:
