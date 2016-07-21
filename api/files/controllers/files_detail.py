@@ -6,7 +6,7 @@ from api.files.controllers import files_api
 from api.utils.json_decorator import json
 
 
-@files_api.route("/<int:file_id>/", methods=['GET'])
+@files_api.route("/api/<int:file_id>/", methods=['GET'])
 @json
 def files_detail(file_id):
     file = File.query.get(file_id)

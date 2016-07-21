@@ -9,9 +9,33 @@ from api.files.models import File
 from api.utils.errors import unprocessable_entry
 from werkzeug.utils import secure_filename
 from config import UPLOAD_FOLDER
+from flask import render_template, request
+
+
 @files_api.route("/", methods=['GET', 'POST'])
-@json
 def files_list():
+    view_type = request.args.get('type', '')
+    if view_type == "index":
+        files = db_session.query(File).group_by(File.type)
+    else:
+        files = db_session.query(File).filter(File.type == view_type)
+
+    data = []
+    for item in files:
+        data_dict = item.to_json()
+        data_dict['href'] = request.host_url[:-1] + url_for('files_api.files_detail', file_id=item.id)
+        data.append(data_dict)
+    return render_template('index.html', data=data)
+
+
+@files_api.route("/", methods=['GET', 'POST'])
+def carousel():
+    return render_template('index.html')
+
+
+@files_api.route("/api/", methods=['GET', 'POST'])
+@json
+def api_files_list():
     if request.method == 'GET':
         view_type = request.args.get('type', '')
         if view_type == "index":
