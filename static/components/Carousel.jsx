@@ -54,6 +54,6 @@ var getUrlParameter = function getUrlParameter(sParam) {
 
 
 React.render(
-    <BandComponent bands={bands} />,
+    <CarouselComponent />,
     document.getElementById("Carousel")
 )
