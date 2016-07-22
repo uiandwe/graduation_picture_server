@@ -1,21 +1,16 @@
-import React from 'react';
-import ReactDOM from 'react-dom'
 
-const Carousel = React.createClass({
-    getInitialState : function(){
-        return {
-            auth : false
-        }
+var BandComponent = React.createClass({
+
+    getInitialState: function(){
+      return {customText: "test"};
     },
-
     componentDidMount: function() {
         var type = getUrlParameter('type');
-        $.get('http://127.0.0.1:8000/files/?type='+type).done(function(data) {
+        $.get('http://127.0.0.1:8000/files/api/?type='+type).done(function(data) {
           this.setState({data: data});
         }.bind(this));
-      },
-  
-    render(){
+    },
+    render: function(){
         if (this.state.data) {
             var rows = [];
 
@@ -25,19 +20,20 @@ const Carousel = React.createClass({
                     rows.push(<img src={this.state.data.data[i].path} className="active" />);
                 }
                 else{
-                    rows.push(<img src={this.state.data.data[i].path}/>);    
+                    rows.push(<img src={this.state.data.data[i].path}/>);
                 }
-                
+
             }
           return <div>
                     {rows}
                  </div>;
         }
-        
+
         return <div></div>
-        
+
     }
 });
+
 
 
 var getUrlParameter = function getUrlParameter(sParam) {
@@ -56,4 +52,8 @@ var getUrlParameter = function getUrlParameter(sParam) {
 };
 
 
-export default Carousel
+
+React.render(
+    <BandComponent bands={bands} />,
+    document.getElementById("Carousel")
+)
