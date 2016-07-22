@@ -15,7 +15,7 @@ from flask import render_template, request
 @files_api.route("/", methods=['GET'])
 def files_list():
     view_type = request.args.get('type', '')
-    if view_type == "index":
+    if view_type == "":
         files = db_session.query(File).group_by(File.type)
     else:
         files = db_session.query(File).filter(File.type == view_type)
@@ -27,7 +27,8 @@ def files_list():
         data.append(data_dict)
     if view_type != "" and len(data) > 0:
         return render_template('carousel.html')
-    return render_template('index.html')
+    print(data)
+    return render_template('index.html', data=data)
 
 
 @files_api.route("/upload/", methods=['GET', 'POST'])
@@ -37,53 +38,51 @@ def files_upload():
     elif request.method == 'POST':
         import os
 
-        upload_file = request.files['file']
-
-        if upload_file:
-            print(upload_file.filename)
-
+        upload_files = request.files.getlist('files[]')
         upload_file_type = request.values['type']
         if upload_file_type == "" or upload_file_type is None:
             return unprocessable_entry("type is required parameters")
         return_json = []
 
 
-        file_name = secure_filename(upload_file.filename)
+        for upload_file in upload_files:
+            file_name = secure_filename(upload_file.filename)
 
-        if file_name == "":
-            return unprocessable_entry("file name are required parameters")
+            if file_name == "":
+                return unprocessable_entry("file name are required parameters")
 
-        #확장자 변경
-        file_name_list = file_name.split(".")
-        if file_name_list[-1] == "jpg-original":
-            file_name_list[-1] = "jpg"
-        file_type = file_name_list[-1]
-        #파일 중복 확인
-        files_count = db_session.query(File).filter(File.file_name == file_name).count()
+            #확장자 변경
+            file_name_list = file_name.split(".")
+            if file_name_list[-1] == "jpg-original":
+                file_name_list[-1] = "jpg"
+            file_type = file_name_list[-1]
+            #파일 중복 확인
+            files_count = db_session.query(File).filter(File.file_name == file_name).count()
 
-        if files_count > 0:
-            file_name_list[-2] = file_name_list[-2]+"_"+str(files_count)
-        file_name = ".".join(file_name_list)
-        print(UPLOAD_FOLDER+"/"+upload_file_type+"/"+file_name)
-        #파일 저장
-        file_path = UPLOAD_FOLDER+"/"+upload_file_type+"/"+file_name
-        upload_file.save(os.path.join(file_path))
+            if files_count > 0:
+                file_name_list[-2] = file_name_list[-2]+"_"+str(files_count)
+            file_name = ".".join(file_name_list)
+            print(UPLOAD_FOLDER+"/"+upload_file_type+"/"+file_name)
+            #파일 저장
+            file_path = UPLOAD_FOLDER+"/"+upload_file_type+"/"+file_name
+            upload_file.save(os.path.join(file_path))
 
-        #파일 사이즈
-        file_size = os.path.getsize(file_path)
+            #파일 사이즈
+            file_size = os.path.getsize(file_path)
 
-        new_file = File(file_name, file_type, file_size/1024.0, request.host_url[:-1]+file_path[1:],
-                        upload_file_type)
-        db_session.add(new_file)
+            new_file = File(file_name, file_type, file_size/1024.0, request.host_url[:-1]+file_path[1:],
+                            upload_file_type)
+            db_session.add(new_file)
 
-        try:
-            db_session.commit()
-            data = new_file.to_json()
-            data['href'] = request.host_url[:-1] + url_for('files_api.files_detail', file_id=new_file.id)
-            return_json.append(data)
+            try:
+                db_session.commit()
+                data = new_file.to_json()
+                data['href'] = request.host_url[:-1] + url_for('files_api.files_detail', file_id=new_file.id)
+                return_json.append(data)
 
-        except Exception:
-            return unprocessable_entry("file should")
+            except Exception:
+                return unprocessable_entry("file should")
+
 
         return render_template('upload.html')
 

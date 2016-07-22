@@ -1,16 +1,6 @@
-<!DOCTYPE html>
-<html lang="ko"> 
-    <head>
-        <meta charset="UTF-8">
-        <link rel="stylesheet" href="/static/css/index.css"  type="text/css">
-        <link rel="stylesheet" href="/static/css/ionicons.min.css"  type="text/css">
-        
-    </head>
-    <body>
-        <header>
-            <h1>albums</h1>
-        </header>
-        <div class="content">
+{% extends "layout.html" %}
+{% block body %}
+
             <div class="carousel_left_button">
                 <i class="ion-arrow-left-b"></i>
             </div>
@@ -23,13 +13,4 @@
             <div  id="band_component">
 
             </div>
-    	</div>
-    	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.4/js/bootstrap.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/react/0.13.3/react.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/react/0.13.3/JSXTransformer.js"></script>
-
-        <script type="text/javascript" src="/static/js/index.js"></script>
-        <script type="text/jsx" src="/static/components/Carousel.jsx"></script>
-    </body>
-</html> 
+{% endblock %}

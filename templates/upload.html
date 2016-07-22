@@ -1,24 +1,10 @@
-<!DOCTYPE html>
-<html lang="ko"> 
-    <head>
-        <meta charset="UTF-8">
-        <link rel="stylesheet" href="/static/css/index.css"  type="text/css">
+{% extends "layout.html" %}
+{% block body %}
 
-    </head>
-    <body>
-        <header>
-            <h1>albums</h1>
-        </header>
-        <div class="content">
-	    	<form method="post" action="/files/upload/" enctype="multipart/form-data">
-                <input name="type" type="text" value="shin">
-                <input name="file" type="file">
-                <button type="submit">전송</button>
-            </form>
-              
-    	</div>
-    	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
-        <script type="text/javascript" src="/static/js/index.js"></script>
+    <form method="post" action="/files/upload/" enctype="multipart/form-data">
+        <input name="type" type="text" value="shin">
+        <input  multiple="" name="files[]" type="file">
+        <button type="submit">전송</button>
+    </form>
 
-    </body>
-</html> 
+{% endblock %}

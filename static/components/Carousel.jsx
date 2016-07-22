@@ -1,5 +1,5 @@
 
-var BandComponent = React.createClass({
+var CarouselComponent = React.createClass({
 
     getInitialState: function(){
       return {customText: "test"};

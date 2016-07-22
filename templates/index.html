@@ -1,62 +1,30 @@
-<!DOCTYPE html>
-<html lang="ko"> 
-    <head>
-        <meta charset="UTF-8">
-        <link rel="stylesheet" href="/static/css/index.css"  type="text/css">
+{% extends "layout.html" %}
+{% block body %}
 
-    </head>
-    <body>
-        <header>
-            <h1>albums</h1>
-        </header>
-        <div class="content">
-	    	<h2>albums</h2>
-            
-            <a href="/files/?type=2016">
-                <div class="album" >
-                    <img src="/static/img/1.jpeg" class="img">
-                    <div class="overlay">
-                        <h3 class="title">starred</h3>
-                        <a>0 photos</a>
-                    </div>
-                </div>  
-            </a>
-            <a href="/files/?type=shin">
-                <div class="album" >
-                    <img src="/static/img/1.jpeg" class="img">
-                    <div class="overlay">
-                        <h3 class="title">starred</h3>
-                        <a>0 photos</a>
-                    </div>
-                </div>  
-            </a>
+    <h2>albums</h2>
+    {% for item in data %}
+        <a href="/files/?type={{ item.type }}">
+            <div class="album" >
+                {% if item.path %}
+                <img src="{{ item.path }}" class="img">
+                {% else %}
+                <img src="/static/img/1.jpeg" class="img">
+                {% endif %}
+                <div class="overlay">
+                    <h3 class="title">{{ item.type }}</h3>
+                    <a>0 photos</a>
+                </div>
+            </div>
+        </a>
+    {% endfor %}
 
-            <a>
-                <div class="album" >
-                    <img src="/static/img/1.jpeg" class="img">
-                    <div class="overlay">
-                        <h3 class="title">starred</h3>
-                        <a>0 photos</a>
-                    </div>
-                </div>  
-            </a>
-
-            <a>
-                <div class="album" >
-                    <img src="/static/img/no_images.svg" class="img">
-                    <div class="overlay">
-                        <h3 class="title">starred</h3>
-                        <a>0 photos</a>
-                    </div>
-                </div>  
-            </a>
-
-      
-            
-              
-    	</div>
-    	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
-        <script type="text/javascript" src="/static/js/index.js"></script>
-
-    </body>
-</html> 
+    <a href="/files/upload/">
+        <div class="album" >
+            <img src="/static/img/no_images.svg" class="img">
+            <div class="overlay">
+                <h3 class="title">starred</h3>
+                <a>0 photos</a>
+            </div>
+        </div>
+    </a>
+{% endblock %}
